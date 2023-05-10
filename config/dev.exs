@@ -23,7 +23,7 @@ config :crypto_hub, CryptoHubWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "xLljRK3bowuInSYYfnlq4Kk0PD5kMKAy1HblMG+zrAtcPJFfZsLcv353SCoBtq2Q",
+  secret_key_base: "IzyXFI5UYPMC1ShPTLXQhyeiZuj3TOeEG8R7DSe+3XWNk/AG4JrQQuiUIvSxk15c",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}

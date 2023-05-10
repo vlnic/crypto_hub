@@ -1,4 +1,4 @@
-defmodule CryptoHub.CryptoHub.User do
+defmodule CryptoHub.User do
   use Ecto.Schema
   import Ecto.Changeset
 
