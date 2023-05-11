@@ -1,9 +1,11 @@
 defmodule CryptoHub do
-  @moduledoc """
-  CryptoHub keeps the contexts that define your domain
-  and business logic.
+  @config Application.compile_env(:crypto_hub, :config_impl, CryptoHub.Config)
 
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
-  """
+  def user_session_ttl do
+    @config.get(:user_session_ttl, 60)
+  end
+
+  def access_token_salt do
+    @config.get(:access_token_salt)
+  end
 end

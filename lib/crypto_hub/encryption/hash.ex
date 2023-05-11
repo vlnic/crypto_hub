@@ -9,7 +9,7 @@ defmodule CryptoHub.Encryption.Hash do
     @algorithm_impl.hash_password(pass)
   end
 
-  @callback verify(password(), hashed()) :: {:ok, :pass} | {:error, :invalid}
+  @callback verify(password(), hashed()) :: {:ok, :pass} | {:error, :invalid_password}
   def verify(pass, hashed) do
     @algorithm_impl.verify(pass, hashed)
   end

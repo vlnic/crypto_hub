@@ -29,6 +29,10 @@ config :crypto_hub, CryptoHubWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
+config :crypto_hub,
+  user_session_ttl: 60,
+  access_token_salt: "user"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

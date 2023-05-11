@@ -15,11 +15,11 @@ defmodule CryptoHub.Encryption.Argon do
       if Argon2.verify_pass(password, hashed) do
         {:ok, :pass}
       else
-        {:error, :invalid}
+        {:error, :invalid_password}
       end
     catch
       _ ->
-        {:error, :invalid}
+        {:error, :invalid_password}
     end
   end
 end
