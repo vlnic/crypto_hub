@@ -50,7 +50,10 @@ defmodule CryptoHub.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:enacl, "~> 1.2"}
+      {:enacl, "~> 1.2"},
+      {:construct, "~> 2.0"},
+      {:uuid5, "~> 1.1"},
+      {:argon2_elixir, "~> 3.0"}
     ]
   end
 

@@ -6,6 +6,7 @@ defmodule CryptoHub.User do
 
   schema "users" do
     field :login, :string
+    field :email, :string
     field :password, :string
 
     timestamps()
@@ -14,7 +15,7 @@ defmodule CryptoHub.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:login, :password])
+    |> cast(attrs, [:login, :password, :email])
     |> validate_required([:login, :password])
   end
 end

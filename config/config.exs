@@ -8,7 +8,8 @@
 import Config
 
 config :crypto_hub,
-  ecto_repos: [CryptoHub.Repo]
+  ecto_repos: [CryptoHub.Repo],
+  hash_impl: CryptoHub.Encryption.Argon
 
 # Configures the endpoint
 config :crypto_hub, CryptoHubWeb.Endpoint,
