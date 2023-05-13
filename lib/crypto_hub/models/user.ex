@@ -19,7 +19,7 @@ defmodule CryptoHub.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:login, :password, :email])
+    |> cast(attrs, [:login, :password, :email, :id])
     |> unique_constraint([:login])
     |> validate_required([:login, :password])
   end

@@ -10,14 +10,20 @@ defmodule CryptoHubWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
+  pipeline :public_api do
     plug :accepts, ["json"]
+  end
+
+  scope "/api", CryptoHubWeb do
+    pipe_through :public_api
+
+    post "/auth", AuthenticateController, :auth
   end
 
   scope "/", CryptoHubWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/home", PageController, :home
   end
 
   # Other scopes may use custom stacks.

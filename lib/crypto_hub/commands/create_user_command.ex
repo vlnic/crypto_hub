@@ -8,6 +8,7 @@ defmodule CryptoHub.Commands.CreateUserCommand do
 
     %User{}
     |> User.changeset(%{
+      id: UUID5.generate(),
       login: login,
       email: email,
       password: hashed_pass
