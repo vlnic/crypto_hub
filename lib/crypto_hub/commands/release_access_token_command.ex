@@ -5,7 +5,7 @@ defmodule CryptoHub.Commands.ReleaseAccessTokenCommand do
   def execute(%User{} = user, context) do
     Phoenix.Token.sign(
       context,
-      make_salt(user.id),
+      CryptoHub.access_token_salt(),
       token_payload(user),
       [max_age: CryptoHub.user_session_ttl()]
     )
@@ -13,9 +13,5 @@ defmodule CryptoHub.Commands.ReleaseAccessTokenCommand do
 
   defp token_payload(%{id: id}) do
     %{user_id: id, issued: DateTime.utc_now() |> DateTime.to_unix()}
-  end
-
-  defp make_salt(user_id) do
-    "user_#{user_id}"
   end
 end

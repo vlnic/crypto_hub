@@ -1,6 +1,8 @@
 defmodule CryptoHubWeb.Router do
   use CryptoHubWeb, :router
 
+  alias CryptoHubWeb.Plug.ProtectedApiPlug
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -12,6 +14,17 @@ defmodule CryptoHubWeb.Router do
 
   pipeline :public_api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :api do
+    plug :accepts, ["json"]
+    plug ProtectedApiPlug
+  end
+
+  scope "/api/user", CryptoHubWeb do
+    pipe_through :api
+
+    get "/", UserController, :show
   end
 
   scope "/api", CryptoHubWeb do
