@@ -8,4 +8,10 @@ defmodule CryptoHub do
   def access_token_salt do
     @config.get(:access_token_salt)
   end
+
+  def platform_module(platform) do
+    platform
+    |> @config.get()
+    |> Keyword.get(platform)
+  end
 end

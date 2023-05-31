@@ -2,25 +2,25 @@ defmodule CryptoHub.Platforms.Binance do
   use GenServer
 
   alias CryptoHub.Account
-  alias CryptoHub.Platforms.Binance.{
-    BinanceSessionSup,
-    SessionRegistry
-  }
+  alias CryptoHub.Platforms.Binance.SessionRegistry
 
   @behaviour CryptoHub.Platform
 
+  @binance_v1 Application.compile_env(:crypto_hub, :binance_client, BinanceHttp.Api.SAPI.V1)
   @update_state_timeout 1800
 
   defmodule State do
     defstruct [
       account: nil,
       account_info: %{},
+      secret_key: nil,
+      api_key: nil,
       wallet_list: []
     ]
   end
 
   def start_link(account) do
-    GenServer.start_link(__MODULE__, [account], name: via_tuple(huid, udid))
+    GenServer.start_link(__MODULE__, [account], name: via_tuple(account.id))
   end
 
   def init(account) do
@@ -48,27 +48,23 @@ defmodule CryptoHub.Platforms.Binance do
       [] ->
         {:error, :session_not_found}
 
-      {pid, _value} ->
+      [{pid, _value}] ->
         {:ok, pid}
     end
   end
 
-  def account_info(any) do
-
+  def account_info(account_id) do
+    with {:ok, pid} <- get_session(account_id) do
+      GenServer.call(pid, :account_info)
+    end
   end
 
-  def coin_average_price() do
-
+  def handle_continue(:fetch_account_info, %{api_key: api_key, secret_key: secret} = state) do
+    wallets = @binance_v1.capital_getall(%{}, api_key: api_key, secret_key: secret)
+    {:noreply, %{state | wallet_list: wallets}}
   end
 
-  def wallet_list() do
-
-  end
-
-  def wallet_info(wallet_id) do
-  end
-
-  def handle_continue(:fetch_account_info, state) do
-    
+  def handle_call(:account_info, _from, state) do
+    {:reply, state.wallet_list, state}
   end
 end

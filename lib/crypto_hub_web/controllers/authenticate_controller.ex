@@ -3,7 +3,10 @@ defmodule CryptoHubWeb.AuthenticateController do
 
   alias CryptoHubWeb.Requests.AuthenticateByLoginRequest
   alias CryptoHub.Authenticate.AuthenticateByLoginCommand
-  alias CryptoHub.Commands.ReleaseAccessTokenCommand
+  alias CryptoHub.Commands.{
+    ReleaseAccessTokenCommand,
+    StartAccountProcessesCommand
+  }
 
   require Logger
 
@@ -12,6 +15,7 @@ defmodule CryptoHubWeb.AuthenticateController do
     with {:ok, %{login: login, password: pass}} <- AuthenticateByLoginRequest.make(params),
          {:ok, user} <- AuthenticateByLoginCommand.execute(login, pass)
     do
+      StartAccountProcessesCommand.execute(user)
       token = ReleaseAccessTokenCommand.execute(user, conn)
 
       conn

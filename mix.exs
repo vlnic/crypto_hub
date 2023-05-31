@@ -53,7 +53,8 @@ defmodule CryptoHub.MixProject do
       {:enacl, "~> 1.2"},
       {:construct, "~> 2.0"},
       {:uuid5, "~> 1.1"},
-      {:argon2_elixir, "~> 3.0"}
+      {:argon2_elixir, "~> 3.0"},
+      {:binance_http, "~> 0.1.2"}
     ]
   end
 
