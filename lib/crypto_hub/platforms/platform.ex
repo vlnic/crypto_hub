@@ -6,4 +6,6 @@ defmodule CryptoHub.Platform do
   @type account_id :: binary() | atom()
 
   @callback account_info(account_id) :: {:ok, term()} | {:error, term()}
+
+  @callback open_orders_list(account_id) :: {:ok, list()} | {:error, term()}
 end

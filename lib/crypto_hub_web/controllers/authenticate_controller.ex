@@ -13,10 +13,10 @@ defmodule CryptoHubWeb.AuthenticateController do
   def auth(conn, params) do
     Logger.info("auth action params: #{inspect params}")
     with {:ok, %{login: login, password: pass}} <- AuthenticateByLoginRequest.make(params),
-         {:ok, user} <- AuthenticateByLoginCommand.execute(login, pass)
+         {:ok, user} <- AuthenticateByLoginCommand.execute(login, pass),
+         {:ok, token} = ReleaseAccessTokenCommand.execute(user, conn)
     do
       StartAccountProcessesCommand.execute(user)
-      token = ReleaseAccessTokenCommand.execute(user, conn)
 
       conn
       |> put_resp_header("content-type", "application/json")

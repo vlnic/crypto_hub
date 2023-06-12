@@ -3,12 +3,14 @@ defmodule CryptoHub.Commands.ReleaseAccessTokenCommand do
 
   def execute(user, context \\ CryptoHubWeb.Endpoint)
   def execute(%User{} = user, context) do
-    Phoenix.Token.sign(
+    token = Phoenix.Token.sign(
       context,
       CryptoHub.access_token_salt(),
       token_payload(user),
       [max_age: CryptoHub.user_session_ttl()]
     )
+
+    {:ok, token}
   end
 
   defp token_payload(%{id: id}) do

@@ -59,6 +59,12 @@ defmodule CryptoHub.Platforms.Binance do
     end
   end
 
+  def open_orders_list(account_id) do
+    with {:ok, pid} <- get_session(account_id) do
+      GenServer.call(pid, :open_orders_list)
+    end
+  end
+
   def handle_continue(:fetch_account_info, %{api_key: api_key, secret_key: secret} = state) do
     wallets = @binance_v1.capital_getall(%{}, api_key: api_key, secret_key: secret)
     {:noreply, %{state | wallet_list: wallets}}
