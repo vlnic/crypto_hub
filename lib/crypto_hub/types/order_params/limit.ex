@@ -1,12 +1,14 @@
 defmodule CryptoHub.Types.OrderParams.Limit do
-  use Construct do
-    field :time_in_force, :string
-    field :quantity, :integer
-    field :price, :number
-  end
-
-  def cast(params) when is_map(params) or is_struct(params) do
-    make(params)
+  def cast(%{
+    "time_in_force" => tif,
+    "quantity" => q,
+    "price" => price
+  }) when is_binary(tif) and is_integer(q) and is_number(price) do
+    {:ok, %{
+      time_in_force: tif,
+      quantity: q,
+      price: price
+    }}
   end
   def cast(_), do: {:error, :incorrect_limit_params}
 end

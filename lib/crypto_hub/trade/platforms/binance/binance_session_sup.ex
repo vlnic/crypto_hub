@@ -1,9 +1,9 @@
-defmodule CryptoHub.Platforms.Binance.BinanceSessionSup do
+defmodule CryptoHub.Trade.Platforms.Binance.BinanceSessionSup do
   use Supervisor
 
   alias CryptoHub.Account
-  alias CryptoHub.Platform.Binance.SessionRegistry
-  alias CryptoHub.Platforms.Binance
+  alias CryptoHub.Trade.Platform.Binance.SessionRegistry
+  alias CryptoHub.Trade.Platforms.Binance
 
   require Logger
 
@@ -11,7 +11,7 @@ defmodule CryptoHub.Platforms.Binance.BinanceSessionSup do
     Supervisor.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  def init(init_arg \\ []) do
+  def init(_) do
     chlidren = [
       session_spec()
     ]
@@ -19,11 +19,12 @@ defmodule CryptoHub.Platforms.Binance.BinanceSessionSup do
     Supervisor.init(chlidren, strategy: :one_for_one)
   end
 
-  def start_session(%Account{platform: platform} = account) do
+  def start_session(%Account{platform: "binance"} = account) do
     account
     |> Binance.child_spec()
     |> start_child()
   end
+  def start_session(_), do: {:error, :undefined_platform}
 
   def session_spec do
     %{

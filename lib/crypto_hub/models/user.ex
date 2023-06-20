@@ -6,7 +6,7 @@ defmodule CryptoHub.User do
   alias CryptoHub.Repo
   alias CryptoHub.User
 
-  @primary_key {:id, :binary_id, autogenerate: false}
+  @primary_key {:id, UUID5, autogenerate: false}
 
   schema "users" do
     field :login, :string

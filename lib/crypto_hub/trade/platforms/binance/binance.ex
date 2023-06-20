@@ -1,10 +1,12 @@
-defmodule CryptoHub.Platforms.Binance do
+defmodule CryptoHub.Trade.Platforms.Binance do
   use GenServer
 
   alias CryptoHub.Account
-  alias CryptoHub.Platforms.Binance.SessionRegistry
+  alias CryptoHub.Trade.Platform.Binance.SessionRegistry
 
-  @behaviour CryptoHub.Platform
+  require Logger
+
+  @behaviour CryptoHub.Trade.Platform
 
   @binance_v1 Application.compile_env(:crypto_hub, :binance_client, BinanceHttp.Api.SAPI.V1)
   @update_state_timeout 1800
@@ -65,12 +67,31 @@ defmodule CryptoHub.Platforms.Binance do
     end
   end
 
-  def handle_continue(:fetch_account_info, %{api_key: api_key, secret_key: secret} = state) do
-    wallets = @binance_v1.capital_getall(%{}, api_key: api_key, secret_key: secret)
-    {:noreply, %{state | wallet_list: wallets}}
+  def handle_continue(:fetch_account_info, %{api_key: api_key, secret_key: secret, account: acc} = state) do
+    with {:ok, wallets} <- @binance_v1.capital_getall(%{}, api_key: api_key, secret_key: secret) do
+      Process.send_after(self(), :fetch_account_info, @update_state_timeout)
+
+      {:noreply, %{state | wallet_list: wallets}}
+    else
+      error ->
+        Logger.error("Binance fetch_account_info #{acc.id} error: #{inspect error}")
+        {:noreply, state}
+    end
   end
 
   def handle_call(:account_info, _from, state) do
     {:reply, state.wallet_list, state}
+  end
+
+  def handle_info(:fetch_account_info, %{api_key: api_key, secret_key: secret, account: acc} = state) do
+    with {:ok, wallets} <- @binance_v1.capital_getall(%{}, api_key: api_key, secret_key: secret) do
+      Process.send_after(self(), :fetch_account_info, @update_state_timeout)
+
+      {:noreply, %{state | wallet_list: wallets}}
+    else
+      error ->
+        Logger.error("Binance fetch_account_info #{acc.id} error: #{inspect error}")
+        {:noreply, state}
+    end
   end
 end
