@@ -4,7 +4,7 @@ defmodule CryptoHub.Commands.StartAccountProcessesCommand do
 
   def execute(user) do
     user
-    |> Account.by_user(user)
+    |> Account.by_user()
     |> Enum.each(&start_session/1)
   end
 

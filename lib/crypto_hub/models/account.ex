@@ -9,8 +9,9 @@ defmodule CryptoHub.Account do
     EncryptedString
   }
   alias CryptoHub.User
+  alias CryptoHub.Repo
 
-  @primary_key {:id, :binary_id, autogenerate: false}
+  @primary_key {:id, UUID5, autogenerate: false}
 
   schema "accounts" do
     field :credentials, EncryptedMap
